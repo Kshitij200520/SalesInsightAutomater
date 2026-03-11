@@ -1,11 +1,11 @@
 const nodemailer = require('nodemailer');
 
 async function sendEmail(recipientEmail, summaryText) {
-  const host = process.env.SMTP_HOST;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com'; // Default to Gmail/Google Workspace
+  const user = process.env.SMTP_USER || process.env.EMAIL_USER;
+  const pass = process.env.SMTP_PASS || process.env.EMAIL_PASS;
 
-  if (!host || !user || !pass || user === 'your_email@gmail.com') {
+  if (!host || !user || !pass || user.includes('your_email@gmail.com')) {
     console.log(`\n--- MOCK EMAIL TO: ${recipientEmail} ---\n${summaryText}\n----------------------`);
     return false; // Indicating mock sending
   }

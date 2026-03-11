@@ -58,7 +58,11 @@ const FileUpload = () => {
       setEmail('');
     } catch (err) {
       setStatus('error');
-      setMessage(err.message || 'An error occurred during processing.');
+      if (err.message === 'Failed to fetch') {
+        setMessage('Failed to connect to the backend. Please ensure VITE_API_URL is correctly set in your environment variables.');
+      } else {
+        setMessage(err.message || 'An error occurred during processing.');
+      }
     }
   };
 
