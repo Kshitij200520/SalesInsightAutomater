@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Swagger docs available at http://localhost:${PORT}/docs`);
+  console.log(`Server is LIVE on port ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/`);
+  console.log(`Swagger docs: http://localhost:${PORT}/docs`);
 });
