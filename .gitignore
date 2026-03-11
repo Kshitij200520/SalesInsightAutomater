@@ -16,3 +16,5 @@ coverage/
 # Testing artifacts
 test.js
 lint_output.txt
+.github/
+
