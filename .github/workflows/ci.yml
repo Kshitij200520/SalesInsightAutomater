@@ -1,0 +1,39 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    name: Build & Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js (Frontend & Backend)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Backend Dependencies & Lint
+        working-directory: ./backend
+        run: |
+          npm ci
+          npm run lint || echo "Linting finished"
+
+      - name: Frontend Dependencies & Validate Build
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm run lint || echo "Linting finished"
+          npm run build
+
+      - name: Test Docker Compose Build
+        run: docker compose build

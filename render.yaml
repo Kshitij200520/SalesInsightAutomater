@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: sales-insight-automator-api
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
