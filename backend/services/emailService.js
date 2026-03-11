@@ -13,11 +13,14 @@ async function sendEmail(recipientEmail, summaryText) {
   const transporter = nodemailer.createTransport({
     host: host,
     port: process.env.SMTP_PORT || 587,
-    secure: false, // true for 465, false for other ports
+    secure: process.env.SMTP_PORT == 465, 
     auth: {
       user: user,
       pass: pass,
     },
+    connectionTimeout: 15000, 
+    greetingTimeout: 10000,
+    socketTimeout: 20000
   });
 
   try {
