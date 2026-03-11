@@ -70,18 +70,26 @@ router.post('/', upload.single('file'), async (req, res) => {
     }
 
     // 2. Extract Metrics
+    console.log('Step 2: Extracting metrics...');
     const metricsString = extractMetricsStr(parsedData);
     
-    // 3. Generate AI Summary using Gemini API
+    // 3. Generate AI Summary
+    console.log('Step 3: Generating AI summary...');
     const summary = await generateSummary(metricsString);
+    console.log('AI Summary generated successfully.');
 
-    // 4. Send Email
-    const emailSent = await sendEmail(email, summary);
+    // 4. Send Email (Fire and forget to avoid UI hang)
+    console.log('Step 4: Sending email to:', email);
+    sendEmail(email, summary).then(sent => {
+      console.log('Email delivery status:', sent ? 'Success' : 'Mock/Failed');
+    }).catch(err => {
+      console.error('Background email error:', err.message);
+    });
 
     res.status(200).json({
-      message: 'Analysis complete and summary generated.',
+      message: 'Analysis complete.',
       summary: summary,
-      emailStatus: emailSent ? 'Email sent successfully.' : 'Email printed to console (SMTP mock).'
+      emailStatus: 'Process initiated. Checking delivery...'
     });
 
   } catch (error) {
