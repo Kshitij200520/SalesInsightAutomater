@@ -21,15 +21,15 @@ const limiter = rateLimit({
 });
 app.use('/analyze', limiter); // explicitly apply to /analyze
 
-// Swagger documentation
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 // Routes
 app.use('/analyze', analyzeRoute);
 
-// Health check
+// Swagger documentation - Mounted after routes
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Root route - Plain text as requested
 app.get('/', (req, res) => {
-  res.status(200).json({ status: 'healthy', message: 'Sales Insight Automator API is running.' });
+  res.send('Sales Insight Automator API running 🚀');
 });
 
 app.listen(PORT, () => {
