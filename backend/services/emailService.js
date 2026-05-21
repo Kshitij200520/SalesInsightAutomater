@@ -1,6 +1,38 @@
 const nodemailer = require('nodemailer');
 
 async function sendEmail(recipientEmail, summaryText) {
+  const resendApiKey = process.env.RESEND_API_KEY;
+
+  if (resendApiKey) {
+    console.log('Sending email via Resend API...');
+    try {
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendApiKey.trim()}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'Sales Insight Automator <onboarding@resend.dev>',
+          to: recipientEmail,
+          subject: 'Automated Executive Sales Summary',
+          text: summaryText,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Resend API returned an error');
+      }
+      console.log('Message sent via Resend:', data.id);
+      return true;
+    } catch (err) {
+      console.error('Resend sending failed:', err.message);
+      throw new Error('Failed to send email via Resend.');
+    }
+  }
+
+  // Fallback to Nodemailer SMTP
   const host = process.env.SMTP_HOST || 'smtp.gmail.com'; // Default to Gmail/Google Workspace
   const user = process.env.SMTP_USER || process.env.EMAIL_USER;
   let pass = process.env.SMTP_PASS || process.env.EMAIL_PASS;
