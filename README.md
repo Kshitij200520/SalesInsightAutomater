@@ -95,6 +95,8 @@ Vite React apps integrate natively into Vercel's global edge:
 ## 🔑 Environment Variables Setup
 The system expects these specific secure structures bound privately to the runtime orchestration. 
 **Backend Keys**:
+- `GROQ_API_KEY`: Groq API key. The default Groq model is `llama-3.1-8b-instant`.
+- *(Optional)* `GROQ_MODEL`: Override the Groq model; use a model ID enabled for your Groq account.
 - `GEMINI_API_KEY`: Generative Intelligence binding key for parsing execution. 
 - `SMTP_USER` & `SMTP_PASS`: Target delivery service config bounds. 
 - *(Optional)* `SMTP_HOST` & `SMTP_PORT`
