@@ -5,17 +5,25 @@ async function generateSummary(metricsString) {
   const groqKey = process.env.GROQ_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
 
-  // Prefer Groq if key is set (very generous free tier)
+  // 1. Try Groq if key is present
   if (groqKey && groqKey !== 'your_groq_api_key_here') {
-    return await generateWithGroq(groqKey, metricsString);
+    try {
+      return await generateWithGroq(groqKey, metricsString);
+    } catch (err) {
+      console.warn("Groq generation failed, falling back to Gemini:", err.message);
+    }
   }
 
-  // Fallback to Gemini
+  // 2. Try Gemini if key is present
   if (geminiKey && geminiKey !== 'your_gemini_api_key_here') {
-    return await generateWithGemini(geminiKey, metricsString);
+    try {
+      return await generateWithGemini(geminiKey, metricsString);
+    } catch (err) {
+      console.warn("Gemini generation failed, falling back to mock summary:", err.message);
+    }
   }
 
-  // Mock fallback
+  // 3. Mock fallback
   return `[MOCK AI SUMMARY] Based on the extracted data:\n${metricsString}\n\nThe overall revenue is strong. Key regions performed well. Configure GROQ_API_KEY or GEMINI_API_KEY to see actual AI output.`;
 }
 
